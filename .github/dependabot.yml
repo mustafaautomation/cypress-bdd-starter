@@ -11,9 +11,15 @@ updates:
           - "cypress"
           - "@badeball/cypress-cucumber-preprocessor"
           - "@bahmutov/cypress-esbuild-preprocessor"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
