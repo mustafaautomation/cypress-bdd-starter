@@ -1,0 +1,33 @@
+name: Smoke Tests
+
+on:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Smoke Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run smoke tests
+        uses: cypress-io/github-action@v6
+        with:
+          command: npm run test:smoke
+        env:
+          CYPRESS_BASE_URL:      ${{ vars.CYPRESS_BASE_URL || 'https://www.saucedemo.com' }}
+          CYPRESS_STANDARD_USER: ${{ vars.CYPRESS_STANDARD_USER || 'standard_user' }}
+          CYPRESS_PASSWORD:      ${{ secrets.CYPRESS_PASSWORD }}
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-screenshots-${{ github.run_id }}
+          path: reports/screenshots/
+          retention-days: 7

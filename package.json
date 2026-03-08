@@ -1,0 +1,47 @@
+{
+  "name": "cypress-bdd-starter",
+  "version": "1.0.0",
+  "description": "Cypress + Cucumber BDD framework with TypeScript POM — SauceDemo reference implementation",
+  "author": "Quvantic <info@quvantic.com> (https://quvantic.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mustafaautomation/cypress-bdd-starter.git"
+  },
+  "homepage": "https://github.com/mustafaautomation/cypress-bdd-starter#readme",
+  "bugs": {
+    "url": "https://github.com/mustafaautomation/cypress-bdd-starter/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "cypress run",
+    "test:smoke": "cypress run --env tags=@smoke",
+    "test:regression": "cypress run --env tags=@regression",
+    "test:headed": "cypress run --headed",
+    "open": "cypress open",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"**/*.ts\"",
+    "format:check": "prettier --check \"**/*.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "cypress": "^13.0.0",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.4.0"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
+    "stepDefinitions": "cypress/support/step_definitions/**/*.ts"
+  }
+}
