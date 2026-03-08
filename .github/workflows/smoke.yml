@@ -2,8 +2,11 @@ name: Smoke Tests
 
 on:
   pull_request:
-    branches: [main, develop]
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   smoke:
@@ -13,20 +16,29 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Lint check
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+
+      - run: npm run lint
+      - run: npm run format:check
 
       - name: Run smoke tests
         uses: cypress-io/github-action@v6
         with:
+          install: false
           command: npm run test:smoke
         env:
-          CYPRESS_BASE_URL:      ${{ vars.CYPRESS_BASE_URL || 'https://www.saucedemo.com' }}
+          CYPRESS_BASE_URL: ${{ vars.CYPRESS_BASE_URL || 'https://www.saucedemo.com' }}
           CYPRESS_STANDARD_USER: ${{ vars.CYPRESS_STANDARD_USER || 'standard_user' }}
-          CYPRESS_PASSWORD:      ${{ secrets.CYPRESS_PASSWORD }}
+          CYPRESS_PASSWORD: ${{ secrets.CYPRESS_PASSWORD }}
 
       - name: Upload screenshots on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: smoke-screenshots-${{ github.run_id }}
           path: reports/screenshots/
