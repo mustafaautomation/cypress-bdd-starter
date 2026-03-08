@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run regression tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           command: npm run test:regression
         env:
