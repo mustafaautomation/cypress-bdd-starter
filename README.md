@@ -1,18 +1,33 @@
-# cypress-bdd-starter
+# Cypress BDD Starter
 
-> Cypress + Cucumber BDD framework with TypeScript POM — demonstrating how QA teams collaborate using human-readable feature files.
+[![Smoke Tests](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/smoke.yml/badge.svg)](https://github.com/mustafaautomation/cypress-bdd-starter/actions)
+[![Regression Tests](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/regression.yml/badge.svg)](https://github.com/mustafaautomation/cypress-bdd-starter/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](Dockerfile)
 
-[![Smoke Tests](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/smoke.yml/badge.svg)](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/smoke.yml)
-[![Regression Tests](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/regression.yml/badge.svg)](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/regression.yml)
-[![License: MIT](https://img.shields.io/github/license/mustafaautomation/cypress-bdd-starter)](https://github.com/mustafaautomation/cypress-bdd-starter/blob/main/LICENSE)
-[![Cypress](https://img.shields.io/badge/tested%20with-Cypress-04C38E?logo=cypress&logoColor=white)](https://www.cypress.io/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+Cypress + Cucumber BDD framework with TypeScript Page Object Model. Feature files written in plain English let non-technical stakeholders review and contribute to test coverage. Targets [SauceDemo](https://www.saucedemo.com) as a reference implementation.
+
+---
+
+## Table of Contents
+
+- [Why BDD?](#why-bdd)
+- [Quick Start](#quick-start)
+- [Architecture](#architecture)
+- [Stack](#stack)
+- [Feature Coverage](#feature-coverage)
+- [Key Patterns](#key-patterns)
+- [CI/CD Integration](#cicd-integration)
+- [Project Structure](#project-structure)
+- [Development](#development)
 
 ---
 
 ## Why BDD?
 
-BDD bridges the gap between developers, QA, and product owners. Feature files written in plain English let non-technical stakeholders review and contribute to test coverage — no code required.
+BDD bridges the gap between developers, QA, and product owners. Feature files in plain English let non-technical stakeholders review and contribute to test coverage — no code required.
 
 ```gherkin
 Scenario: User completes a full purchase
@@ -26,56 +41,11 @@ Scenario: User completes a full purchase
 
 ---
 
-## Stack
-
-| Tool | Purpose |
-|---|---|
-| [Cypress](https://cypress.io) 13+ | Test runner |
-| [@badeball/cypress-cucumber-preprocessor](https://github.com/badeball/cypress-cucumber-preprocessor) | Gherkin + step definitions |
-| TypeScript | Type-safe step definitions and POM |
-| GitHub Actions | CI with Cypress official action |
-| SauceDemo | Target application |
-
----
-
-## Architecture
-
-```
-cypress-bdd-starter/
-├── cypress/
-│   ├── e2e/
-│   │   ├── auth/
-│   │   │   └── login.feature          # Login scenarios in Gherkin
-│   │   ├── inventory/
-│   │   │   └── inventory.feature      # Product & cart scenarios
-│   │   └── checkout/
-│   │       └── checkout.feature       # Purchase flow scenarios
-│   └── support/
-│       ├── pages/                     # Page Object Models
-│       │   ├── LoginPage.ts
-│       │   ├── InventoryPage.ts
-│       │   ├── CartPage.ts
-│       │   └── CheckoutPage.ts
-│       ├── step_definitions/          # Gherkin → Cypress mappings
-│       │   ├── auth.steps.ts
-│       │   ├── inventory.steps.ts
-│       │   └── checkout.steps.ts
-│       ├── commands.ts                # Custom commands (loginAsStandardUser)
-│       └── e2e.ts                     # Support file entry point
-├── cypress.config.ts
-└── .github/workflows/
-    ├── smoke.yml                      # PR checks
-    └── regression.yml                 # Merge + nightly
-```
-
----
-
 ## Quick Start
 
 ```bash
 git clone https://github.com/mustafaautomation/cypress-bdd-starter.git
 cd cypress-bdd-starter
-
 npm install
 cp .env.example .env
 
@@ -91,15 +61,35 @@ npm run open
 
 ---
 
-## Test Commands
+## Architecture
 
-| Command | Description |
+```
+┌─────────────────────────────────────────────────────┐
+│                  Feature Files (.feature)             │
+│         auth/login  │  inventory  │  checkout         │
+├─────────────────────────────────────────────────────┤
+│              Step Definitions (Gherkin → Cypress)     │
+│         auth.steps  │ inventory.steps │ checkout.steps│
+├─────────────────────────────────────────────────────┤
+│                Page Object Models                    │
+│      LoginPage │ InventoryPage │ CartPage │ Checkout │
+├─────────────────────────────────────────────────────┤
+│              Cypress + Cucumber Preprocessor          │
+│                  (esbuild bundler)                    │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Stack
+
+| Tool | Purpose |
 |---|---|
-| `npm test` | All scenarios, headless |
-| `npm run test:smoke` | `@smoke` tagged scenarios only |
-| `npm run test:regression` | `@regression` tagged scenarios |
-| `npm run test:headed` | Run with visible browser |
-| `npm run open` | Cypress interactive mode |
+| [Cypress](https://cypress.io) 13+ | Test runner |
+| [@badeball/cypress-cucumber-preprocessor](https://github.com/badeball/cypress-cucumber-preprocessor) | Gherkin + step definitions |
+| TypeScript | Type-safe step definitions and POM |
+| GitHub Actions | CI with Cypress official action |
+| [SauceDemo](https://www.saucedemo.com) | Target application |
 
 ---
 
@@ -113,13 +103,28 @@ npm run open
 
 ---
 
+## Test Commands
+
+| Command | Description |
+|---|---|
+| `npm test` | All scenarios, headless |
+| `npm run test:smoke` | `@smoke` tagged scenarios only |
+| `npm run test:regression` | `@regression` tagged scenarios |
+| `npm run test:headed` | Run with visible browser |
+| `npm run open` | Cypress interactive mode |
+
+---
+
 ## Key Patterns
 
 ### Session Caching
+
 `cy.loginAsStandardUser()` uses `cy.session()` to authenticate once and reuse the session — identical concept to Playwright's `storageState`. No repeated logins between tests.
 
 ### Scenario Outlines
+
 Data-driven scenarios with `Examples` tables keep tests DRY:
+
 ```gherkin
 Scenario Outline: Checkout fails when required fields are missing
   When I enter first name "<firstName>", last name "<lastName>", postal code "<postalCode>"
@@ -132,6 +137,72 @@ Scenario Outline: Checkout fails when required fields are missing
 ```
 
 ---
+
+## CI/CD Integration
+
+Two GitHub Actions workflows:
+
+- **Smoke** — Runs on PRs with lint and format gates
+- **Regression** — Runs on merge to main + nightly at 3 AM UTC
+
+Both use the official `cypress-io/github-action@v6` with screenshot upload on failure.
+
+---
+
+## Project Structure
+
+```
+cypress-bdd-starter/
+├── .github/
+│   ├── workflows/
+│   │   ├── smoke.yml               # PR checks with lint gates
+│   │   └── regression.yml          # Merge + nightly regression
+│   ├── dependabot.yml              # Automated dependency updates
+│   ├── CODEOWNERS                  # Review ownership
+│   └── pull_request_template.md    # PR checklist
+├── cypress/
+│   ├── e2e/
+│   │   ├── auth/login.feature      # Login scenarios in Gherkin
+│   │   ├── inventory/inventory.feature
+│   │   └── checkout/checkout.feature
+│   └── support/
+│       ├── pages/                  # Page Object Models
+│       │   ├── LoginPage.ts
+│       │   ├── InventoryPage.ts
+│       │   ├── CartPage.ts
+│       │   └── CheckoutPage.ts
+│       ├── step_definitions/       # Gherkin → Cypress mappings
+│       │   ├── auth.steps.ts
+│       │   ├── inventory.steps.ts
+│       │   └── checkout.steps.ts
+│       ├── commands.ts             # Custom commands
+│       └── e2e.ts                  # Support file entry point
+├── cypress.config.ts
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── Dockerfile
+└── .dockerignore
+```
+
+---
+
+## Development
+
+```bash
+git clone https://github.com/mustafaautomation/cypress-bdd-starter.git
+cd cypress-bdd-starter
+npm install
+npm run open           # Interactive mode
+npm run typecheck      # Type checking
+npm run lint           # ESLint
+npm run format:check   # Prettier
+```
+
+---
+
+## License
+
+MIT
 
 ---
 
