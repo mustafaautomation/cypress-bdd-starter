@@ -12,6 +12,8 @@ export default defineConfig({
     videosFolder: 'reports/videos',
     video: false,
     screenshotOnRunFailure: true,
+    retries: { runMode: 2, openMode: 0 },
+    defaultCommandTimeout: 8000,
 
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
@@ -21,11 +23,12 @@ export default defineConfig({
   },
 
   env: {
-    STANDARD_USER: 'standard_user',
-    PASSWORD: 'secret_sauce',
+    // SauceDemo's public credentials (displayed on login page)
+    STANDARD_USER: process.env.CYPRESS_STANDARD_USER || 'standard_user',
+    PASSWORD: process.env.CYPRESS_PASSWORD || 'secret_sauce',
   },
 
-  reporter: 'junit',
+  reporter: 'mocha-junit-reporter',
   reporterOptions: {
     mochaFile: 'reports/junit/results-[hash].xml',
     toConsole: true,

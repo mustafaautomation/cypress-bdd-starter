@@ -44,3 +44,5 @@ Feature: Product Inventory
   Scenario: User can remove a product from the cart
     When I add "Sauce Labs Backpack" to the cart
     Then the cart badge should show "1"
+    When I remove "Sauce Labs Backpack" from the cart
+    Then the cart badge should not be visible

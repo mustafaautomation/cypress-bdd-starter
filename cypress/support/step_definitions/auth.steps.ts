@@ -1,7 +1,9 @@
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import { LoginPage } from '../pages/LoginPage';
+import { NavPage } from '../pages/NavPage';
 
 const loginPage = new LoginPage();
+const navPage = new NavPage();
 
 Given('I am on the login page', () => {
   loginPage.visit();
@@ -15,22 +17,21 @@ When(
 );
 
 When('I open the navigation menu', () => {
-  cy.get('#react-burger-menu-btn').click();
-  cy.get('#logout_sidebar_link').should('be.visible');
+  navPage.openMenu();
 });
 
 When('I click logout', () => {
-  cy.get('#logout_sidebar_link').click();
+  navPage.logout();
 });
 
 Then('I should be on the inventory page', () => {
   cy.url().should('include', '/inventory.html');
-  cy.get('.inventory_list').should('be.visible');
+  navPage.getInventoryList().should('be.visible');
 });
 
 Then('I should be on the login page', () => {
   cy.url().should('eq', `${Cypress.config('baseUrl')}/`);
-  cy.get('[data-test="login-button"]').should('be.visible');
+  loginPage.getLoginButton().should('be.visible');
 });
 
 Then('I should see a login error containing {string}', (message: string) => {

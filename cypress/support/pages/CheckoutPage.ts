@@ -7,6 +7,9 @@ export class CheckoutPage {
     finishButton: '[data-test="finish"]',
     error: '[data-test="error"]',
     completeHeader: '[data-test="complete-header"]',
+    subtotalLabel: '.summary_subtotal_label',
+    taxLabel: '.summary_tax_label',
+    totalLabel: '.summary_total_label',
   };
 
   fillInfo(firstName: string, lastName: string, postalCode: string): void {
@@ -34,5 +37,26 @@ export class CheckoutPage {
 
   getCompleteHeader(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.selectors.completeHeader);
+  }
+
+  getSubtotal(): Cypress.Chainable<number> {
+    return cy
+      .get(this.selectors.subtotalLabel)
+      .invoke('text')
+      .then((text) => parseFloat(text.replace(/[^0-9.]/g, '')));
+  }
+
+  getTax(): Cypress.Chainable<number> {
+    return cy
+      .get(this.selectors.taxLabel)
+      .invoke('text')
+      .then((text) => parseFloat(text.replace(/[^0-9.]/g, '')));
+  }
+
+  getTotal(): Cypress.Chainable<number> {
+    return cy
+      .get(this.selectors.totalLabel)
+      .invoke('text')
+      .then((text) => parseFloat(text.replace(/[^0-9.]/g, '')));
   }
 }

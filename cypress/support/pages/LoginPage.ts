@@ -23,4 +23,8 @@ export class LoginPage {
   getError(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.selectors.error);
   }
+
+  getLoginButton(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get(this.selectors.loginButton);
+  }
 }

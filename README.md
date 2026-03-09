@@ -20,6 +20,7 @@ Cypress + Cucumber BDD framework with TypeScript Page Object Model. Feature file
 - [Feature Coverage](#feature-coverage)
 - [Key Patterns](#key-patterns)
 - [CI/CD Integration](#cicd-integration)
+- [Docker](#docker)
 - [Project Structure](#project-structure)
 - [Development](#development)
 
@@ -64,19 +65,19 @@ npm run open
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                  Feature Files (.feature)             │
-│         auth/login  │  inventory  │  checkout         │
-├─────────────────────────────────────────────────────┤
-│              Step Definitions (Gherkin → Cypress)     │
-│         auth.steps  │ inventory.steps │ checkout.steps│
-├─────────────────────────────────────────────────────┤
-│                Page Object Models                    │
-│      LoginPage │ InventoryPage │ CartPage │ Checkout │
-├─────────────────────────────────────────────────────┤
-│              Cypress + Cucumber Preprocessor          │
-│                  (esbuild bundler)                    │
-└─────────────────────────────────────────────────────┘
++---------------------------------------------------------+
+|                  Feature Files (.feature)                |
+|         auth/login  |  inventory  |  checkout            |
++---------------------------------------------------------+
+|              Step Definitions (Gherkin -> Cypress)        |
+|       auth.steps | inventory.steps | checkout.steps      |
++---------------------------------------------------------+
+|                Page Object Models                        |
+|  LoginPage | NavPage | InventoryPage | CartPage | Checkout|
++---------------------------------------------------------+
+|              Cypress + Cucumber Preprocessor              |
+|                  (esbuild bundler)                        |
++---------------------------------------------------------+
 ```
 
 ---
@@ -88,6 +89,7 @@ npm run open
 | [Cypress](https://cypress.io) 13+ | Test runner |
 | [@badeball/cypress-cucumber-preprocessor](https://github.com/badeball/cypress-cucumber-preprocessor) | Gherkin + step definitions |
 | TypeScript | Type-safe step definitions and POM |
+| mocha-junit-reporter | JUnit XML test reports |
 | GitHub Actions | CI with Cypress official action |
 | [SauceDemo](https://www.saucedemo.com) | Target application |
 
@@ -97,9 +99,11 @@ npm run open
 
 | Feature | Scenarios | Tags |
 |---|---|---|
-| Authentication | Login, logout, error states, field validation | `@smoke` `@regression` |
-| Inventory | Product count, all 4 sort modes, add to cart | `@smoke` `@regression` |
-| Checkout | Full flow, total validation, missing field errors | `@smoke` `@regression` |
+| Authentication | 6 — Login, logout, error states, field validation | `@smoke` `@regression` |
+| Inventory | 8 — Product count, all 4 sort modes, add to cart, remove from cart | `@smoke` `@regression` |
+| Checkout | 5 — Full flow, total validation, missing field errors | `@smoke` `@regression` |
+
+**Total: 19 scenarios** across 3 feature files.
 
 ---
 
@@ -136,16 +140,46 @@ Scenario Outline: Checkout fails when required fields are missing
     | John      |          | 12345      | Last Name is required   |
 ```
 
+### Page Object Model
+
+All selectors live in dedicated POM classes — step definitions stay clean and readable:
+
+- `LoginPage` — Login form interactions
+- `NavPage` — Burger menu, logout, navigation chrome
+- `InventoryPage` — Product listing, sorting, add/remove cart
+- `CartPage` — Cart contents, checkout trigger
+- `CheckoutPage` — Checkout form, order summary, price extraction
+
 ---
 
 ## CI/CD Integration
 
 Two GitHub Actions workflows:
 
-- **Smoke** — Runs on PRs with lint and format gates
+- **Smoke** — Runs on PRs and pushes to main with lint and format gates
 - **Regression** — Runs on merge to main + nightly at 3 AM UTC
 
-Both use the official `cypress-io/github-action@v6` with screenshot upload on failure.
+Both use the official `cypress-io/github-action@v6` with screenshot upload on failure and JUnit XML report generation.
+
+---
+
+## Docker
+
+Build and run tests in a container:
+
+```bash
+# Build the image
+docker build -t cypress-bdd-starter .
+
+# Run all tests
+docker run cypress-bdd-starter
+
+# Run smoke tests only
+docker run cypress-bdd-starter --env tags=@smoke
+
+# Run regression tests only
+docker run cypress-bdd-starter --env tags=@regression
+```
 
 ---
 
@@ -155,7 +189,7 @@ Both use the official `cypress-io/github-action@v6` with screenshot upload on fa
 cypress-bdd-starter/
 ├── .github/
 │   ├── workflows/
-│   │   ├── smoke.yml               # PR checks with lint gates
+│   │   ├── smoke.yml               # PR + push checks with lint gates
 │   │   └── regression.yml          # Merge + nightly regression
 │   ├── dependabot.yml              # Automated dependency updates
 │   ├── CODEOWNERS                  # Review ownership
@@ -165,9 +199,12 @@ cypress-bdd-starter/
 │   │   ├── auth/login.feature      # Login scenarios in Gherkin
 │   │   ├── inventory/inventory.feature
 │   │   └── checkout/checkout.feature
+│   ├── fixtures/
+│   │   └── products.json           # Product data fixture
 │   └── support/
 │       ├── pages/                  # Page Object Models
 │       │   ├── LoginPage.ts
+│       │   ├── NavPage.ts
 │       │   ├── InventoryPage.ts
 │       │   ├── CartPage.ts
 │       │   └── CheckoutPage.ts

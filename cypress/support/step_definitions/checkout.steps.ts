@@ -34,22 +34,13 @@ Then('I should see the confirmation {string}', (message: string) => {
 });
 
 Then('the order total should equal subtotal plus tax', () => {
-  cy.get('.summary_subtotal_label')
-    .invoke('text')
-    .then((subtotalText) => {
-      cy.get('.summary_tax_label')
-        .invoke('text')
-        .then((taxText) => {
-          cy.get('.summary_total_label')
-            .invoke('text')
-            .then((totalText) => {
-              const subtotal = parseFloat(subtotalText.replace(/[^0-9.]/g, ''));
-              const tax = parseFloat(taxText.replace(/[^0-9.]/g, ''));
-              const total = parseFloat(totalText.replace(/[^0-9.]/g, ''));
-              expect(total).to.be.closeTo(subtotal + tax, 0.01);
-            });
-        });
+  checkoutPage.getSubtotal().then((subtotal) => {
+    checkoutPage.getTax().then((tax) => {
+      checkoutPage.getTotal().then((total) => {
+        expect(total).to.be.closeTo(subtotal + tax, 0.01);
+      });
     });
+  });
 });
 
 Then('I should see a checkout error {string}', (message: string) => {

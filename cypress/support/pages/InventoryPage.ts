@@ -49,6 +49,13 @@ export class InventoryPage {
     return cy.get(this.selectors.cartBadge).invoke('text');
   }
 
+  removeFromCartByName(productName: string): void {
+    cy.get(this.selectors.items)
+      .filter(`:has(.inventory_item_name:contains("${productName}"))`)
+      .find('[data-test^="remove"]')
+      .click();
+  }
+
   goToCart(): void {
     cy.get(this.selectors.cartLink).click();
   }

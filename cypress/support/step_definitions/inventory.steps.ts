@@ -58,6 +58,14 @@ Then('the product prices should be in descending order', () => {
   });
 });
 
+When('I remove {string} from the cart', (productName: string) => {
+  inventoryPage.removeFromCartByName(productName);
+});
+
 Then('the cart badge should show {string}', (count: string) => {
   cy.get('.shopping_cart_badge').should('have.text', count);
+});
+
+Then('the cart badge should not be visible', () => {
+  cy.get('.shopping_cart_badge').should('not.exist');
 });

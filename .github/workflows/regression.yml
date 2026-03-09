@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Run regression tests
         uses: cypress-io/github-action@v6
@@ -31,7 +31,7 @@ jobs:
 
       - name: Upload screenshots on failure
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: regression-screenshots-${{ github.run_id }}
           path: reports/screenshots/
@@ -39,7 +39,7 @@ jobs:
 
       - name: Upload JUnit results
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: junit-results-${{ github.run_id }}
           path: reports/junit/
