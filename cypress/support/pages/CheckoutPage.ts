@@ -9,7 +9,7 @@ export class CheckoutPage {
     completeHeader: '[data-test="complete-header"]',
     subtotalLabel: '.summary_subtotal_label',
     taxLabel: '.summary_tax_label',
-    totalLabel: '.summary_total_label',
+    totalLabel: '[data-test="total-label"]',
   };
 
   fillInfo(firstName: string, lastName: string, postalCode: string): void {

@@ -20,9 +20,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install and lint
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+
+      - name: Lint check
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
       - name: Run regression tests
         uses: cypress-io/github-action@v6
         with:
+          install: false
           command: npm run test:regression
         env:
           CYPRESS_BASE_URL: ${{ vars.CYPRESS_BASE_URL || 'https://www.saucedemo.com' }}
