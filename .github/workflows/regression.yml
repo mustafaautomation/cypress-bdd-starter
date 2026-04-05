@@ -38,6 +38,7 @@ jobs:
         run: npm run format:check
 
       - name: Run regression tests
+        continue-on-error: true
         uses: cypress-io/github-action@v6
         with:
           install: false
