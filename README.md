@@ -3,7 +3,7 @@
 [![Smoke Tests](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/smoke.yml/badge.svg)](https://github.com/mustafaautomation/cypress-bdd-starter/actions)
 [![Regression Tests](https://github.com/mustafaautomation/cypress-bdd-starter/actions/workflows/regression.yml/badge.svg)](https://github.com/mustafaautomation/cypress-bdd-starter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
+[![Node.js](https://img.shields.io/badge/Node.js-22+-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](Dockerfile)
 
@@ -86,11 +86,11 @@ npm run open
 
 | Tool | Purpose |
 |---|---|
-| [Cypress](https://cypress.io) 13+ | Test runner |
-| [@badeball/cypress-cucumber-preprocessor](https://github.com/badeball/cypress-cucumber-preprocessor) | Gherkin + step definitions |
-| TypeScript | Type-safe step definitions and POM |
+| [Cypress](https://cypress.io) 16 | Test runner (public values via `Cypress.expose()`, secrets via `cy.env()`) |
+| [@badeball/cypress-cucumber-preprocessor](https://github.com/badeball/cypress-cucumber-preprocessor) 28 | Gherkin + step definitions; tag filtering with `--expose tags=@smoke` |
+| TypeScript 6, ESLint 10 (flat config), Prettier | Type-safe step definitions and POM, linted in CI |
 | mocha-junit-reporter | JUnit XML test reports |
-| GitHub Actions | CI with Cypress official action |
+| GitHub Actions | CI with the official Cypress action (v7) on Node 24 |
 | [SauceDemo](https://www.saucedemo.com) | Target application |
 
 ---
@@ -175,10 +175,10 @@ docker build -t cypress-bdd-starter .
 docker run cypress-bdd-starter
 
 # Run smoke tests only
-docker run cypress-bdd-starter --env tags=@smoke
+docker run cypress-bdd-starter --expose tags=@smoke
 
 # Run regression tests only
-docker run cypress-bdd-starter --env tags=@regression
+docker run cypress-bdd-starter --expose tags=@regression
 ```
 
 ---

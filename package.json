@@ -1,7 +1,7 @@
 {
   "name": "cypress-bdd-starter",
   "version": "1.0.0",
-  "description": "Cypress + Cucumber BDD framework with TypeScript POM — SauceDemo reference implementation",
+  "description": "Cypress + Cucumber BDD framework with TypeScript POM \u2014 SauceDemo reference implementation",
   "author": "Quvantic <info@quvantic.com> (https://quvantic.com)",
   "license": "MIT",
   "repository": {
@@ -13,33 +13,34 @@
     "url": "https://github.com/mustafaautomation/cypress-bdd-starter/issues"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
     "test": "cypress run",
-    "test:smoke": "cypress run --env tags=@smoke",
-    "test:regression": "cypress run --env tags=@regression",
+    "test:smoke": "cypress run --expose tags=@smoke",
+    "test:regression": "cypress run --expose tags=@regression",
     "test:headed": "cypress run --headed",
     "open": "cypress open",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.ts\"",
     "format:check": "prettier --check \"**/*.ts\"",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@badeball/cypress-cucumber-preprocessor": "^20.0.0",
-    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "cypress": "^13.0.0",
-    "esbuild": "^0.20.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
+    "@badeball/cypress-cucumber-preprocessor": "^28.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "cypress": "^16.2.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
     "mocha-junit-reporter": "^2.2.1",
-    "prettier": "^3.3.0",
-    "typescript": "^5.4.0"
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.0"
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": false,
