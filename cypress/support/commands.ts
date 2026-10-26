@@ -27,8 +27,11 @@ Cypress.Commands.add('loginAsStandardUser', () => {
     },
     {
       validate() {
-        cy.visit('/inventory.html');
+        // SauceDemo's static host answers deep links with HTTP 404 but still serves the app,
+        // so don't fail on the status code; check that the logged-in page actually rendered.
+        cy.visit('/inventory.html', { failOnStatusCode: false });
         cy.url().should('include', '/inventory.html');
+        cy.get('[data-test="inventory-list"]').should('be.visible');
       },
     },
   );

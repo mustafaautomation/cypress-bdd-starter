@@ -9,7 +9,9 @@ export class InventoryPage {
   };
 
   visit(): void {
-    cy.visit('/inventory.html');
+    // SauceDemo returns HTTP 404 for SPA deep links while still rendering the page.
+    cy.visit('/inventory.html', { failOnStatusCode: false });
+    cy.get(this.selectors.items).should('have.length.greaterThan', 0);
   }
 
   getProductCount(): Cypress.Chainable<number> {

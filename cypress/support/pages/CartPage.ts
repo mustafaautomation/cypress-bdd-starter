@@ -6,7 +6,9 @@ export class CartPage {
   };
 
   visit(): void {
-    cy.visit('/cart.html');
+    // SauceDemo returns HTTP 404 for SPA deep links while still rendering the page.
+    cy.visit('/cart.html', { failOnStatusCode: false });
+    cy.get('[data-test="cart-list"]').should('exist');
   }
 
   checkout(): void {
