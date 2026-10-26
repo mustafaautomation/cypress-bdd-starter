@@ -7,7 +7,6 @@
 export {};
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
       loginAsStandardUser(): void;
@@ -19,9 +18,13 @@ Cypress.Commands.add('loginAsStandardUser', () => {
   cy.session(
     'standard-user',
     () => {
+      // Cypress 16: public values come from Cypress.expose(); secrets are read with cy.env(),
+      // which keeps them out of the browser bundle and the command log.
       cy.visit('/');
-      cy.get('[data-test="username"]').type(Cypress.env('STANDARD_USER') || 'standard_user');
-      cy.get('[data-test="password"]').type(Cypress.env('PASSWORD') || 'secret_sauce');
+      cy.get('[data-test="username"]').type(Cypress.expose('STANDARD_USER') || 'standard_user');
+      cy.env(['PASSWORD']).then(({ PASSWORD }) => {
+        cy.get('[data-test="password"]').type(PASSWORD || 'secret_sauce', { log: false });
+      });
       cy.get('[data-test="login-button"]').click();
       cy.url().should('include', '/inventory.html');
     },

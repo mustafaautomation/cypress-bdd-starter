@@ -1,12 +1,21 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
-    "module": "commonjs",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "module": "preserve",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["cypress", "node"]
+    "types": [
+      "cypress",
+      "node"
+    ],
+    "moduleResolution": "bundler"
   },
-  "include": ["cypress/**/*.ts"]
+  "include": [
+    "cypress/**/*.ts"
+  ]
 }

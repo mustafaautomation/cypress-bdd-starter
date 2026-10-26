@@ -22,9 +22,12 @@ export default defineConfig({
     },
   },
 
-  env: {
-    // SauceDemo's public credentials (displayed on login page)
+  // SauceDemo's public demo credentials (shown on its login page). The username is exposed to the
+  // browser; the password is treated as a secret and read with cy.env() (Cypress 16).
+  expose: {
     STANDARD_USER: process.env.CYPRESS_STANDARD_USER || 'standard_user',
+  },
+  env: {
     PASSWORD: process.env.CYPRESS_PASSWORD || 'secret_sauce',
   },
 
